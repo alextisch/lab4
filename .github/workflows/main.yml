@@ -12,7 +12,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
 
@@ -83,7 +83,17 @@ jobs:
       shell: pwsh
       run: |
         Write-Output "Testing equation solver:"
-        $output = .\solver_application\solver.exe
+        $input = "1 0 -25"
+        $psi = [System.Diagnostics.ProcessStartInfo]::new()
+        $psi.FileName = ".\solver_application\solver.exe"
+        $psi.RedirectStandardInput = $true
+        $psi.RedirectStandardOutput = $true
+        $psi.UseShellExecute = $false
+        $process = [System.Diagnostics.Process]::Start($psi)
+        $process.StandardInput.WriteLine($input)
+        $process.StandardInput.Close()
+        $output = $process.StandardOutput.ReadToEnd()
+        $process.WaitForExit()
         Write-Output $output
         if ($output -notmatch "x1 = -5.00000") { Write-Error "x1 test failed"; exit 1 }
         if ($output -notmatch "x2 = 5.00000") { Write-Error "x2 test failed"; exit 1 }
