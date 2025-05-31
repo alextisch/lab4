@@ -57,8 +57,8 @@ jobs:
     - name: Setup MSVC Developer Command Prompt
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Add CMake to PATH
-      uses: lukka/get-cmake@v3
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v2
 
     - name: Create Build Directory
       run: mkdir build
